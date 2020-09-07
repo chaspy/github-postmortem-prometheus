@@ -124,7 +124,7 @@ func main() {
 				"full_reponame": fmt.Sprintf("%s/%s", githubUsername, githubReponame),
 			},
 		},
-		[]string{"library", "language", "from_version", "to_version", "directory", "security"},
+		[]string{"title"},
 	)
 
 	prometheus.MustRegister(
