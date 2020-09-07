@@ -2,12 +2,10 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"regexp"
 	"time"
 
 	"github.com/google/go-github/v32/github"
@@ -104,37 +102,6 @@ type postmortemPullRequest struct {
 	Security    bool
 }
 
-var pattern = regexp.MustCompile(`^(\[Security\] )?(?:Bump|Update) (?P<library>\S+)(?: requirement)? from (?P<from_version>.+?) to (?P<to_version>.+?)(?: in /(?P<directory>.+?))?$`)
-
-func parseDependabotPullRequest(issue *github.Issue) (*postmortemPullRequest, error) {
-	matches := pattern.FindStringSubmatch(issue.GetTitle())
-
-	if len(matches) > 0 {
-		var security bool
-		if matches[1] != "" {
-			security = true
-		}
-
-		var language string
-		for _, label := range issue.Labels {
-			if _, ok := LanguageLabels[label.GetName()]; ok {
-				language = label.GetName()
-			}
-		}
-
-		return &postmortemPullRequest{
-			Library:     matches[2],
-			Language:    language,
-			FromVersion: matches[3],
-			ToVersion:   matches[4],
-			Directory:   matches[5],
-			Security:    security,
-		}, nil
-	}
-
-	return nil, errors.New("Pattern not matched")
-}
-
 func main() {
 	githubUsername = os.Getenv("GITHUB_USERNAME")
 	if githubUsername == "" {
@@ -174,24 +141,8 @@ func collect() {
 	openPullRequestsGauge.Reset()
 
 	for issue := range searchIssues() {
-		pr, err := parseDependabotPullRequest(issue)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: failed to parse: #%d: %s\n", issue.GetNumber(), issue.GetTitle())
-			continue
-		}
-
-		var security = "false"
-		if pr.Security {
-			security = "true"
-		}
-
 		labels := prometheus.Labels{
-			"library":      pr.Library,
-			"language":     pr.Language,
-			"from_version": pr.FromVersion,
-			"to_version":   pr.ToVersion,
-			"directory":    pr.Directory,
-			"security":     security,
+			"title": issue.GetTitle(),
 		}
 		openPullRequestsGauge.With(labels).Set(1)
 	}
