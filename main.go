@@ -149,8 +149,8 @@ func main() {
 	openPullRequestsGauge = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Namespace: namespace,
-			Name:      "open_pull_requests",
-			Help:      "Open Pull Requests sent by dependabot",
+			Name:      "open_issues",
+			Help:      "Open Postmortem issue",
 			ConstLabels: prometheus.Labels{
 				"username":      githubUsername,
 				"reponame":      githubReponame,
