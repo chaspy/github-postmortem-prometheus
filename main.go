@@ -61,7 +61,7 @@ func searchIssues() chan *github.Issue {
 	go func() {
 		var lastCreated *time.Time
 		for {
-			query := fmt.Sprintf("repo:%s/%s is:pr is:open label:dependencies", githubUsername, githubReponame)
+			query := fmt.Sprintf("repo:%s/%s is:open label:Postmortem label:SRE", githubUsername, githubReponame)
 			if lastCreated != nil {
 				query = query + " created:>" + lastCreated.Format(time.RFC3339)
 			}
