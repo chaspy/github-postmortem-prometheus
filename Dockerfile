@@ -10,6 +10,6 @@ FROM alpine:3.12
 
 RUN apk --update add ca-certificates
 
-COPY --from=builder /app/github-dependabot-prometheus /github-dependabot-prometheus
+COPY --from=builder /app/github-postmortem-prometheus /github-postmortem-prometheus
 
-ENTRYPOINT ["/github-dependabot-prometheus"]
+ENTRYPOINT ["/github-postmortem-prometheus"]

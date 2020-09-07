@@ -1,4 +1,4 @@
-module github.com/yuya-takeyama/github-dependabot-prometheus
+module github.com/yuya-takeyama/github-postmortem-prometheus
 
 go 1.14
 

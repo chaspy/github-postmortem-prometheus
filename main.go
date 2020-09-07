@@ -34,7 +34,7 @@ var LanguageLabels = map[string]bool{
 	"elm":        true,
 }
 
-const namespace = "github_dependabot"
+const namespace = "github_postmortem"
 
 var (
 	githubUsername string
@@ -95,7 +95,7 @@ func searchIssues() chan *github.Issue {
 	return issueChan
 }
 
-type dependabotPullRequest struct {
+type postmortemPullRequest struct {
 	Library     string
 	Language    string
 	FromVersion string
@@ -106,7 +106,7 @@ type dependabotPullRequest struct {
 
 var pattern = regexp.MustCompile(`^(\[Security\] )?(?:Bump|Update) (?P<library>\S+)(?: requirement)? from (?P<from_version>.+?) to (?P<to_version>.+?)(?: in /(?P<directory>.+?))?$`)
 
-func parseDependabotPullRequest(issue *github.Issue) (*dependabotPullRequest, error) {
+func parseDependabotPullRequest(issue *github.Issue) (*postmortemPullRequest, error) {
 	matches := pattern.FindStringSubmatch(issue.GetTitle())
 
 	if len(matches) > 0 {
@@ -122,7 +122,7 @@ func parseDependabotPullRequest(issue *github.Issue) (*dependabotPullRequest, er
 			}
 		}
 
-		return &dependabotPullRequest{
+		return &postmortemPullRequest{
 			Library:     matches[2],
 			Language:    language,
 			FromVersion: matches[3],

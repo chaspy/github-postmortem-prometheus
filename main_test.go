@@ -10,7 +10,7 @@ import (
 func TestParseDependabotPullRequest(t *testing.T) {
 	testCases := []struct {
 		issue    *github.Issue
-		expected *dependabotPullRequest
+		expected *postmortemPullRequest
 	}{
 		{
 			issue: &github.Issue{
@@ -21,7 +21,7 @@ func TestParseDependabotPullRequest(t *testing.T) {
 					},
 				},
 			},
-			expected: &dependabotPullRequest{
+			expected: &postmortemPullRequest{
 				Library:     "jsdom",
 				Language:    "javascript",
 				FromVersion: "12.2.0",
@@ -39,7 +39,7 @@ func TestParseDependabotPullRequest(t *testing.T) {
 					},
 				},
 			},
-			expected: &dependabotPullRequest{
+			expected: &postmortemPullRequest{
 				Library:     "foo-lib",
 				Language:    "ruby",
 				FromVersion: "1.11.0",
@@ -57,7 +57,7 @@ func TestParseDependabotPullRequest(t *testing.T) {
 					},
 				},
 			},
-			expected: &dependabotPullRequest{
+			expected: &postmortemPullRequest{
 				Library:     "bar-lib",
 				Language:    "javascript",
 				FromVersion: "6.0.0",
@@ -75,7 +75,7 @@ func TestParseDependabotPullRequest(t *testing.T) {
 					},
 				},
 			},
-			expected: &dependabotPullRequest{
+			expected: &postmortemPullRequest{
 				Library:     "grpc",
 				Language:    "go",
 				FromVersion: ">= 1.19, < 1.29",
